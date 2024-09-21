@@ -5,7 +5,7 @@ const StockCounter = () => {
     const [stock, setStock] = useState({ remaining_iron_sheets: 0, remaining_cement_packs: 0 });
 
     useEffect(() => {
-        axios.get('/api/stock/')
+        axios.get('http://localhost:8000/api/stock/')
             .then(response => setStock(response.data))
             .catch(error => console.log(error));
     }, []);
