@@ -1,6 +1,6 @@
 import React from 'react';
 import StockCounter from './components/StockCounter';
-import StockReductionForm from './components/StockReductionForm';
+// import StockReductionForm from './components/StockReductionForm';
 
 function App() {
     return (
