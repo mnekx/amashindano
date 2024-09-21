@@ -6,7 +6,7 @@ function App() {
     return (
         <div>
             <StockCounter />
-            <StockReductionForm />
+            {/* <StockReductionForm /> */}
         </div>
     );
 }
