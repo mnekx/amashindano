@@ -5,16 +5,18 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Stock
 from .serializers import StockSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import action
 
 class StockViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
 
     def list(self, request):
+        self.permission_classes = [AllowAny]
         stock = Stock.objects.first()
         serializer = StockSerializer(stock)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['put'], permission_classes=[IsAuthenticated])
     def reduce_stock(self, request):
         stock = Stock.objects.first()
         iron_sheets = request.data.get('iron_sheets', 0)
