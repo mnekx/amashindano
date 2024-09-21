@@ -6,12 +6,12 @@ from rest_framework.response import Response
 from .models import Stock
 from .serializers import StockSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
 class StockViewSet(viewsets.ViewSet):
 
+    @action(detail=False, methods=['put'], permission_classes=[AllowAny])
     def list(self, request):
-        self.permission_classes = [AllowAny]
         stock = Stock.objects.first()
         serializer = StockSerializer(stock)
         return Response(serializer.data)
