@@ -44,7 +44,7 @@ const StockCounter = () => {
     fetchStock(); // Fetch stock when the component mounts
 
     // Update stock data every 10 seconds (polling)
-    const stockInterval = setInterval(fetchStock, 10000); // Poll every 10 seconds
+    const stockInterval = setInterval(fetchStock, 600000); // Poll every 10 minutes
 
     // Cleanup interval on unmount
     return () => clearInterval(stockInterval);
