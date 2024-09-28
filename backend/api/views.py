@@ -5,12 +5,12 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Stock
 from .serializers import StockSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 
 class StockViewSet(viewsets.ViewSet):
 
-    @action(detail=False, methods=['put'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['put'], permission_classes=[])
     def list(self, request):
         stock = Stock.objects.first()
         serializer = StockSerializer(stock)

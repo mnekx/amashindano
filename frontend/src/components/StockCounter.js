@@ -32,6 +32,25 @@ const StockCounter = () => {
   };
 
   // Fetch stock data from the API
+  const fetchStock = () => {
+    axios
+      .get('http://localhost:8000/api/stock/')
+      .then((response) => setStock(response.data))
+      .catch((error) => console.error('Error fetching stock:', error));
+  };
+
+  // Initial fetch of stock data and countdown update
+  useEffect(() => {
+    fetchStock(); // Fetch stock when the component mounts
+
+    // Update stock data every 10 seconds (polling)
+    const stockInterval = setInterval(fetchStock, 600000); // Poll every 10 minutes
+
+    // Cleanup interval on unmount
+    return () => clearInterval(stockInterval);
+  }, []);
+
+  // Fetch stock data from the API
   useEffect(() => {
     axios
       .get('http://localhost:8000/api/stock/')
@@ -49,11 +68,11 @@ const StockCounter = () => {
   }, []);
 
   return (
-    <div className='container mt-5'>
-      <div className='row'>
+    <div className='container h-100 mt-5'>
+      <div className='row h-100 d-flex align-items-stretch'>
         {/* Stock Display Card */}
         <div className='col-md-6'>
-          <div className='card shadow-sm'>
+          <div className='card h-100 shadow-sm'>
             <div className='card-header bg-primary text-white'>
               <h3>Mzigo uliobaki</h3>
             </div>
