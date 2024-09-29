@@ -5,6 +5,7 @@ const StockCounter = () => {
   const [stock, setStock] = useState({
     remaining_iron_sheets: 0,
     remaining_cement_packs: 0,
+    served_schools: [],
   });
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -13,11 +14,10 @@ const StockCounter = () => {
     seconds: 0,
   });
 
-  // Function to calculate the time difference between the current date and the deadline
   const calculateTimeLeft = () => {
-    const deadline = new Date('2024-12-30T00:00:00'); // Set the deadline to 30th Dec 2024
-    const now = new Date(); // Get current date and time
-    const difference = deadline - now; // Difference in milliseconds
+    const deadline = new Date('2024-12-30T00:00:00');
+    const now = new Date();
+    const difference = deadline - now;
 
     if (difference > 0) {
       return {
@@ -50,14 +50,6 @@ const StockCounter = () => {
     return () => clearInterval(stockInterval);
   }, []);
 
-  // Fetch stock data from the API
-  useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/stock/')
-      .then((response) => setStock(response.data))
-      .catch((error) => console.error('Error fetching stock:', error));
-  }, []);
-
   // Update countdown every second
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,37 +59,47 @@ const StockCounter = () => {
     return () => clearInterval(timer); // Clean up the interval on component unmount
   }, []);
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/stock/')
+      .then((response) => setStock(response.data))
+      .catch((error) => console.error('Error fetching stock:', error));
+  }, []);
+
   return (
-    <div className='container h-100 mt-5'>
-      <div className='row h-100 d-flex align-items-stretch'>
-        {/* Stock Display Card */}
-        <div className='col-md-6'>
+    <div className='container mt-5'>
+      <div className='row'>
+        <div className='col-md-6 mb-3'>
           <div className='card h-100 shadow-sm'>
             <div className='card-header bg-primary text-white'>
-              <h3>Mzigo uliobaki</h3>
+              <h3>Stock Remaining</h3>
             </div>
-            <div className='card-body'>
-              <ul className='list-group list-group-flush'>
-                <li className='list-group-item'>
-                  <strong>Mabati:</strong> {stock.remaining_iron_sheets}
-                </li>
-                <li className='list-group-item'>
-                  <strong>Mifuko ya sementi:</strong>{' '}
-                  {stock.remaining_cement_packs}
-                </li>
+            <div className='card-body text-center'>
+              <p className='display-4'>
+                Iron Sheets: {stock.remaining_iron_sheets}
+              </p>
+              <p className='display-4'>
+                Cement Packs: {stock.remaining_cement_packs}
+              </p>
+              <h4>Schools Served</h4>
+              <ul className='list-group'>
+                {stock.served_schools.map((school) => (
+                  <li key={school.id} className='list-group-item'>
+                    {school.name} <span className='text-success'>✔️</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
 
-        {/* Countdown Timer Card */}
-        <div className='col-md-6'>
-          <div className='card shadow-sm'>
+        <div className='col-md-6 mb-3'>
+          <div className='card h-100 shadow-sm'>
             <div className='card-header bg-warning text-dark'>
-              <h3>Muda unakimbia...</h3>
+              <h3>Countdown to Deadline</h3>
             </div>
             <div className='card-body text-center'>
-              <h4 className='countdown'>
+              <h4>
                 {timeLeft.days} Days : {timeLeft.hours} Hours :{' '}
                 {timeLeft.minutes} Minutes : {timeLeft.seconds} Seconds
               </h4>
